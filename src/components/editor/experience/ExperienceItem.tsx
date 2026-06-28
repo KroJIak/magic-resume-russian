@@ -72,6 +72,7 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({
 };
 
 const ExperienceItem = ({ experience }: { experience: Experience }) => {
+  const t = useTranslations("workbench.experienceItem");
   const dragControls = useDragControls();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const { updateExperience, deleteExperience } = useResumeStore();
@@ -147,13 +148,8 @@ const ExperienceItem = ({ experience }: { experience: Experience }) => {
           }}
         >
           <div className="flex-1 min-w-0">
-            <h3
-              className={cn(
-                "font-medium truncate",
-                "text-foreground"
-              )}
-            >
-              {experience.company || "家里蹲公司"}
+            <h3 className={cn("font-medium truncate", "text-foreground")}>
+              {experience.company || t("emptyCompany")}
             </h3>
           </div>
           <div className="flex items-center gap-2 ml-4 shrink-0">

@@ -1,21 +1,54 @@
 import TurndownService from "turndown";
-import { DEFAULT_FIELD_ORDER } from "@/config";
+import { getDefaultFieldOrder } from "@/config";
 import { getCustomFieldDisplayText, getCustomFieldHref, shouldShowCustomFieldLabelPrefix } from "@/lib/customField";
+import { defaultLocale, Locale } from "@/i18n/config";
+import { getPreferredLocale } from "@/i18n/runtime";
 import { getProjectLinkMeta } from "@/lib/projectLink";
 import { BasicFieldType, BasicInfo, CustomItem, MenuSection, ResumeData } from "@/types/resume";
 
 const HTML_TAG_REGEX = /<\/?[a-z][\s\S]*>/i;
 const DATA_URL_REGEX = /^data:/i;
 
-const DEFAULT_BASIC_SECTION_TITLES = {
-  basic: "Basic Info",
-  skills: "Skills",
-  experience: "Experience",
-  projects: "Projects",
-  education: "Education",
-  selfEvaluation: "Self Evaluation",
-  certificates: "Certificates"
-} as const;
+const DEFAULT_BASIC_SECTION_TITLES: Record<
+  Locale,
+  {
+    basic: string;
+    skills: string;
+    experience: string;
+    projects: string;
+    education: string;
+    selfEvaluation: string;
+    certificates: string;
+  }
+> = {
+  zh: {
+    basic: "基本信息",
+    skills: "专业技能",
+    experience: "工作经验",
+    projects: "项目经历",
+    education: "教育经历",
+    selfEvaluation: "自我评价",
+    certificates: "证书作品",
+  },
+  en: {
+    basic: "Basic Info",
+    skills: "Skills",
+    experience: "Experience",
+    projects: "Projects",
+    education: "Education",
+    selfEvaluation: "Self Evaluation",
+    certificates: "Certificates",
+  },
+  ru: {
+    basic: "Профиль",
+    skills: "Навыки",
+    experience: "Опыт работы",
+    projects: "Проекты",
+    education: "Образование",
+    selfEvaluation: "О себе",
+    certificates: "Сертификаты",
+  },
+};
 
 type ExportableBasicFieldKey =
   | "name"
@@ -49,6 +82,11 @@ const DEFAULT_BASIC_FIELD_LABELS: Record<ExportableBasicFieldKey, string> = {
 export interface ResumeMarkdownOptions {
   basicFieldLabels?: Partial<Record<ExportableBasicFieldKey, string>>;
 }
+
+const getCurrentLocale = (): Locale =>
+  typeof window !== "undefined"
+    ? getPreferredLocale(window.location.pathname)
+    : defaultLocale;
 
 const normalizeText = (value?: string) => value?.trim() || "";
 const normalizeDateRangeText = (value?: string) =>
@@ -88,6 +126,8 @@ const pickBasicFieldValue = (
 ) => normalizeText((basic[key] as string | undefined) || "");
 
 const getOrderedEnabledSections = (resume: ResumeData): MenuSection[] => {
+  const locale = getCurrentLocale();
+  const defaultTitles = DEFAULT_BASIC_SECTION_TITLES[locale];
   const enabledSections = (resume.menuSections || [])
     .filter((section) => section.enabled)
     .sort((a, b) => a.order - b.order);
@@ -95,13 +135,13 @@ const getOrderedEnabledSections = (resume: ResumeData): MenuSection[] => {
   if (enabledSections.length > 0) return enabledSections;
 
   return [
-    { id: "basic", title: DEFAULT_BASIC_SECTION_TITLES.basic, icon: "", enabled: true, order: 0 },
-    { id: "skills", title: DEFAULT_BASIC_SECTION_TITLES.skills, icon: "", enabled: true, order: 1 },
-    { id: "experience", title: DEFAULT_BASIC_SECTION_TITLES.experience, icon: "", enabled: true, order: 2 },
-    { id: "projects", title: DEFAULT_BASIC_SECTION_TITLES.projects, icon: "", enabled: true, order: 3 },
-    { id: "education", title: DEFAULT_BASIC_SECTION_TITLES.education, icon: "", enabled: true, order: 4 },
-    { id: "selfEvaluation", title: DEFAULT_BASIC_SECTION_TITLES.selfEvaluation, icon: "", enabled: true, order: 5 },
-    { id: "certificates", title: DEFAULT_BASIC_SECTION_TITLES.certificates, icon: "", enabled: true, order: 6 }
+    { id: "basic", title: defaultTitles.basic, icon: "", enabled: true, order: 0 },
+    { id: "skills", title: defaultTitles.skills, icon: "", enabled: true, order: 1 },
+    { id: "experience", title: defaultTitles.experience, icon: "", enabled: true, order: 2 },
+    { id: "projects", title: defaultTitles.projects, icon: "", enabled: true, order: 3 },
+    { id: "education", title: defaultTitles.education, icon: "", enabled: true, order: 4 },
+    { id: "selfEvaluation", title: defaultTitles.selfEvaluation, icon: "", enabled: true, order: 5 },
+    { id: "certificates", title: defaultTitles.certificates, icon: "", enabled: true, order: 6 }
   ];
 };
 
@@ -110,9 +150,10 @@ const renderBasicSection = (
   resume: ResumeData,
   options?: ResumeMarkdownOptions
 ) => {
+  const locale = getCurrentLocale();
   const fieldOrder = (resume.basic.fieldOrder?.length
     ? resume.basic.fieldOrder
-    : DEFAULT_FIELD_ORDER) as BasicFieldType[];
+    : getDefaultFieldOrder(locale)) as BasicFieldType[];
 
   const lines: string[] = [];
   const name = pickBasicFieldValue(resume.basic, "name");

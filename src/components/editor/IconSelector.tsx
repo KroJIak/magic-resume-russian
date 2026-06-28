@@ -316,7 +316,7 @@ const getIconOptions = (t: any): IconOption[] => [
 
   // 社交媒体类
   {
-    label: "Github",
+    label: t("icons.github"),
     value: "Github",
     icon: Github,
     category: t("categories.social"),

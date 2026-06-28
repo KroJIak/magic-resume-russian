@@ -1,5 +1,7 @@
 # Changelog
 
+[English](./CHANGELOG.md) | [Русский](./CHANGELOG.ru.md)
+
 
 ## v2.0.6
 

@@ -13,6 +13,7 @@ import Field from "../Field";
 
 import { CustomItem as CustomItemType } from "@/types/resume";
 import ThemeModal from "@/components/shared/ThemeModal";
+import { useTranslations } from "@/i18n/compat/client";
 const CustomItemEditor = ({
   item,
   onSave,
@@ -20,6 +21,7 @@ const CustomItemEditor = ({
   item: CustomItemType;
   onSave: (item: CustomItemType) => void;
 }) => {
+  const t = useTranslations("workbench.customItem");
   const handleChange = (field: keyof CustomItemType, value: string) => {
     onSave({ ...item, [field]: value });
   };
@@ -29,33 +31,33 @@ const CustomItemEditor = ({
       <div className="grid gap-5">
         <div className="grid grid-cols-2 gap-4">
           <Field
-            label="标题"
+            label={t("labels.title")}
             value={item.title}
             onChange={(value) => handleChange("title", value)}
-            placeholder="标题"
+            placeholder={t("placeholders.title")}
           />
           <Field
-            label="副标题"
+            label={t("labels.subtitle")}
             value={item.subtitle}
             onChange={(value) => handleChange("subtitle", value)}
-            placeholder="副标题"
+            placeholder={t("placeholders.subtitle")}
           />
         </div>
 
         <Field
-          label="时间范围"
+          label={t("labels.dateRange")}
           value={item.dateRange}
           onChange={(value) => handleChange("dateRange", value)}
           type="date-range"
-          placeholder="例如: 2023.01 - 2024.01"
+          placeholder={t("placeholders.dateRange")}
         />
 
         <Field
-          label="详细描述"
+          label={t("labels.description")}
           value={item.description}
           onChange={(value) => handleChange("description", value)}
           type="editor"
-          placeholder="请输入详细描述..."
+          placeholder={t("placeholders.description")}
         />
       </div>
     </div>
@@ -74,6 +76,7 @@ const CustomItem = ({
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const t = useTranslations("workbench.customItem");
   const handleVisibilityToggle = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -136,7 +139,7 @@ const CustomItem = ({
                  "font-medium truncate text-foreground"
               )}
             >
-              {item.title || "未命名模块"}
+              {item.title || t("untitled")}
             </h3>
             {item.subtitle && (
               <p

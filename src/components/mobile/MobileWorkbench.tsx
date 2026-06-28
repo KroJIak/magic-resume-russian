@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileText, Palette, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "@/i18n/compat/client";
 import { useResumeStore } from "@/store/useResumeStore";
 import { EditPanel } from "@/components/editor/EditPanel";
 import { SidePanel } from "@/components/editor/SidePanel";
@@ -13,6 +14,7 @@ type TabType = "content" | "style" | "preview";
 
 export function MobileWorkbench() {
   const [activeTab, setActiveTab] = useState<TabType>("content");
+  const t = useTranslations("workbench.mobile");
   const { activeResume, setActiveSection } = useResumeStore();
   const { activeSection, menuSections } = activeResume || {};
 
@@ -69,7 +71,7 @@ export function MobileWorkbench() {
                       )}
                     >
                       <span className="mr-1.5">👤</span>
-                      基本信息
+                      {t("basicSection")}
                     </button>
                     
                     {/* 其他模块 */}
@@ -139,9 +141,9 @@ export function MobileWorkbench() {
 
       {/* 底部导航栏 */}
       <div className="h-16 border-t bg-background flex items-center justify-around relative shadow-[0_-1px_3px_rgba(0,0,0,0.05)] z-50">
-        {renderNavItem("content", <FileText className="w-5 h-5" />, "内容")}
-        {renderNavItem("style", <Palette className="w-5 h-5" />, "样式")}
-        {renderNavItem("preview", <Eye className="w-5 h-5" />, "预览")}
+        {renderNavItem("content", <FileText className="w-5 h-5" />, t("content"))}
+        {renderNavItem("style", <Palette className="w-5 h-5" />, t("style"))}
+        {renderNavItem("preview", <Eye className="w-5 h-5" />, t("preview"))}
       </div>
     </div>
   );

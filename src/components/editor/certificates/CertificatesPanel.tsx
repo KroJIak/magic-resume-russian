@@ -28,7 +28,7 @@ const CertificatesPanel = () => {
 
     const handleFile = async (file: File) => {
         if (!file.type.startsWith("image/")) {
-            toast.error("Format error"); // Or use i18n
+            toast.error(t("formatError"));
             return;
         }
         try {
@@ -48,7 +48,7 @@ const CertificatesPanel = () => {
             }
             handleCreateCertificate(imageData);
         } catch (e) {
-            toast.error("Upload error");
+            toast.error(t("uploadError"));
         }
     };
 

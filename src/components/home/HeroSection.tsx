@@ -64,7 +64,7 @@ export default function HeroSection() {
              <div className="relative rounded-3xl border border-border/50 bg-secondary/30 p-2 sm:p-4 backdrop-blur-sm shadow-2xl overflow-hidden group">
                 <Image
                   src="/web-shot.png"
-                  alt="Resume Editor Preview"
+                  alt={t("hero.previewAlt")}
                   width={1200}
                   height={800}
                   className="rounded-2xl shadow-sm group-hover:scale-[1.01] transition-transform duration-700"

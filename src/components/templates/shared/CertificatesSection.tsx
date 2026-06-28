@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslations } from "@/i18n/compat/client";
 import { Certificate } from "@/types/resume";
 
 interface CertificatesSectionProps {
@@ -6,6 +7,7 @@ interface CertificatesSectionProps {
 }
 
 const CertificatesSection: React.FC<CertificatesSectionProps> = ({ certificates }) => {
+    const t = useTranslations("workbench.certificatesPanel");
     if (!certificates || certificates.length === 0) return null;
 
     return (
@@ -18,7 +20,7 @@ const CertificatesSection: React.FC<CertificatesSectionProps> = ({ certificates 
                 >
                     <img
                         src={cert.url}
-                        alt="Certificate"
+                        alt={t("imageAlt")}
                         className="w-full h-auto object-contain"
                     />
                 </div>

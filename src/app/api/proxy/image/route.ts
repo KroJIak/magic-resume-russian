@@ -1,28 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  getImageProxyAcceptLanguage,
+  getImageProxyMessages,
+} from "@/lib/server/imageProxyMessages";
 
 // resolve image proxy
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const imageUrl = searchParams.get("url");
+    const acceptLanguage = request.headers.get("accept-language");
+    const messages = getImageProxyMessages(acceptLanguage);
 
     if (!imageUrl) {
-      console.error("缺少图片URL参数");
-      return NextResponse.json({ error: "缺少图片URL参数" }, { status: 400 });
+      console.error(messages.missingUrl);
+      return NextResponse.json({ error: messages.missingUrl }, { status: 400 });
     }
 
     let parsedUrl;
     try {
       parsedUrl = new URL(imageUrl);
     } catch (e) {
-      console.error(`图片URL格式不正确: ${imageUrl}`);
-      return NextResponse.json({ error: "图片URL格式不正确" }, { status: 400 });
+      console.error(`${messages.invalidUrl}: ${imageUrl}`);
+      return NextResponse.json({ error: messages.invalidUrl }, { status: 400 });
     }
 
     if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
-      console.error(`不支持的URL协议: ${parsedUrl.protocol}`);
+      console.error(`${messages.unsupportedProtocol}: ${parsedUrl.protocol}`);
       return NextResponse.json(
-        { error: "只支持HTTP和HTTPS协议" },
+        { error: messages.unsupportedProtocol },
         { status: 400 }
       );
     }
@@ -36,25 +42,25 @@ export async function GET(request: NextRequest) {
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
           Accept:
             "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
-          "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+          "Accept-Language": getImageProxyAcceptLanguage(acceptLanguage),
           Referer: parsedUrl.origin,
         },
       });
     } catch (error: any) {
-      console.error(`获取图片失败: ${error.message || "未知错误"}`);
+      const detail = error.message || "Unknown error";
+      console.error(`${messages.fetchFailed}: ${detail}`);
       return NextResponse.json(
-        { error: `获取图片失败: ${error.message || "未知错误"}` },
+        { error: `${messages.fetchFailed}: ${detail}` },
         { status: 500 }
       );
     }
 
     // 检查响应状态
     if (!response.ok) {
-      console.error(
-        `图片服务器返回错误: ${response.status} ${response.statusText}`
-      );
+      const detail = `${response.status} ${response.statusText}`;
+      console.error(`${messages.fetchFailed}: ${detail}`);
       return NextResponse.json(
-        { error: `获取图片失败: ${response.status} ${response.statusText}` },
+        { error: `${messages.fetchFailed}: ${detail}` },
         { status: response.status }
       );
     }
@@ -62,18 +68,19 @@ export async function GET(request: NextRequest) {
     let imageBuffer;
     try {
       imageBuffer = await response.arrayBuffer();
-      console.log(`成功获取图片，大小: ${imageBuffer.byteLength} 字节`);
+      console.log(`Fetched image successfully, size: ${imageBuffer.byteLength} bytes`);
     } catch (error: any) {
-      console.error(`读取图片内容失败: ${error.message || "未知错误"}`);
+      const detail = error.message || "Unknown error";
+      console.error(`${messages.readFailed}: ${detail}`);
       return NextResponse.json(
-        { error: `读取图片内容失败: ${error.message || "未知错误"}` },
+        { error: `${messages.readFailed}: ${detail}` },
         { status: 500 }
       );
     }
 
     if (imageBuffer.byteLength === 0) {
-      console.error("图片内容为空");
-      return NextResponse.json({ error: "图片内容为空" }, { status: 400 });
+      console.error(messages.emptyImage);
+      return NextResponse.json({ error: messages.emptyImage }, { status: 400 });
     }
 
     const contentType = response.headers.get("content-type") || "image/jpeg";
@@ -92,9 +99,13 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error: any) {
-    console.error("图片代理未处理的错误:", error);
+    const messages = getImageProxyMessages(
+      request.headers.get("accept-language")
+    );
+    const detail = error.message || "Unknown error";
+    console.error(`${messages.unhandled}:`, error);
     return NextResponse.json(
-      { error: `处理图片请求时出错: ${error.message || "未知错误"}` },
+      { error: `${messages.unhandled}: ${detail}` },
       { status: 500 }
     );
   }

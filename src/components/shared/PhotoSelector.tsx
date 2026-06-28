@@ -77,7 +77,7 @@ const PhotoSelector: React.FC<Props> = ({ className }) => {
         {basic.photo && (
           <img
             src={basic.photo}
-            alt="Selected"
+            alt={t("basicPanel.photoAlt")}
             className="w-[48px] h-[48px] object-cover rounded"
           />
         )}

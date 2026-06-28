@@ -170,7 +170,7 @@ const AISettingsPage = () => {
                   </div>
                   <button
                     type="button"
-                    aria-label={`Select ${model.name}`}
+                    aria-label={`${t("dashboard.settings.ai.selectModel")}: ${model.name}`}
                     onClick={() => {
                       setSelectedModel(
                         model.id as "doubao" | "deepseek" | "openai" | "gemini"

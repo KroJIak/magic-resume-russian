@@ -9,6 +9,7 @@ import PreviewPanel from "@/components/preview";
 import PreviewDock from "@/components/preview/PreviewDock";
 import { MobileWorkbench } from "@/components/mobile/MobileWorkbench";
 import { PanelResizeHandle } from "react-resizable-panels";
+import { useTranslations } from "@/i18n/compat/client";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -74,16 +75,19 @@ const LayoutControls = memo(
     toggleSidePanel: () => void;
     toggleEditPanel: () => void;
     togglePreviewPanel: () => void;
-  }) => (
-    <div
-      className={cn(
-        "absolute bottom-6 left-1/2 -translate-x-1/2",
-        "flex items-center gap-2 z-10 p-2 rounded-full",
-        "flex items-center gap-2 z-10 p-2 rounded-full",
-        "bg-background/80 border border-border",
-        "backdrop-blur-sm shadow-lg"
-      )}
-    >
+  }) => {
+    const t = useTranslations("previewDock");
+
+    return (
+      <div
+        className={cn(
+          "absolute bottom-6 left-1/2 -translate-x-1/2",
+          "flex items-center gap-2 z-10 p-2 rounded-full",
+          "flex items-center gap-2 z-10 p-2 rounded-full",
+          "bg-background/80 border border-border",
+          "backdrop-blur-sm shadow-lg"
+        )}
+      >
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -98,7 +102,7 @@ const LayoutControls = memo(
           </TooltipTrigger>
           <TooltipContent>
             <p className="text-xs">
-              {sidePanelCollapsed ? "展开侧边栏" : "收起侧边栏"}
+              {sidePanelCollapsed ? t("sidePanel.expand") : t("sidePanel.collapse")}
             </p>
           </TooltipContent>
         </Tooltip>
@@ -124,7 +128,7 @@ const LayoutControls = memo(
           </TooltipTrigger>
           <TooltipContent>
             <p className="text-xs">
-              {editPanelCollapsed ? "展开编辑面板" : "收起编辑面板"}
+              {editPanelCollapsed ? t("editPanel.expand") : t("editPanel.collapse")}
             </p>
           </TooltipContent>
         </Tooltip>
@@ -148,13 +152,16 @@ const LayoutControls = memo(
           </TooltipTrigger>
           <TooltipContent>
             <p className="text-xs">
-              {previewPanelCollapsed ? "展开预览面板" : "收起预览面板"}
+              {previewPanelCollapsed
+                ? t("previewPanel.expand")
+                : t("previewPanel.collapse")}
             </p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-    </div>
-  )
+      </div>
+    );
+  }
 );
 
 LayoutControls.displayName = "LayoutControls";

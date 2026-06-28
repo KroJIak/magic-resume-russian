@@ -46,7 +46,7 @@ const CertificateItem = ({ certificate }: { certificate: Certificate }) => {
 
                 {/* Thumbnail Preview */}
                 <div className="w-24 border-r border-border shrink-0 bg-muted/20 p-2 flex items-center justify-center overflow-hidden">
-                    <img src={certificate.url} alt="cert" className="max-w-full max-h-full object-contain drop-shadow-sm" />
+                    <img src={certificate.url} alt={t("imageAlt")} className="max-w-full max-h-full object-contain drop-shadow-sm" />
                 </div>
 
                 {/* Content & Actions */}

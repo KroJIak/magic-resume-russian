@@ -103,6 +103,7 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave }) => {
 };
 
 const ProjectItem = ({ project }: { project: Project }) => {
+  const t = useTranslations("workbench.projectItem");
   const { updateProjects, deleteProject, setDraggingProjectId } =
     useResumeStore();
   const dragControls = useDragControls();
@@ -189,13 +190,8 @@ const ProjectItem = ({ project }: { project: Project }) => {
           }}
         >
           <div className="flex-1 min-w-0">
-            <h3
-              className={cn(
-                "font-medium truncate",
-                "text-gray-700 dark:text-neutral-200"
-              )}
-            >
-              {project.name || "未命名项目"}
+            <h3 className={cn("font-medium truncate", "text-gray-700 dark:text-neutral-200")}>
+              {project.name || t("untitled")}
             </h3>
           </div>
           <div className="flex items-center gap-2 ml-4 shrink-0">

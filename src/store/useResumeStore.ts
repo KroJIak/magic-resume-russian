@@ -14,12 +14,11 @@ import {
 } from "../types/resume";
 import { DEFAULT_TEMPLATES } from "@/config";
 import {
-  initialResumeState,
-  initialResumeStateEn,
-  blankResumeState,
-  blankResumeStateEn,
+  BLANK_RESUME_BY_LOCALE,
+  INITIAL_RESUME_BY_LOCALE,
 } from "@/config/initialResumeData";
 import { generateUUID } from "@/utils/uuid";
+import { defaultLocale, locales, type Locale } from "@/i18n/config";
 interface ResumeStore {
   resumes: Record<string, ResumeData>;
   activeResumeId: string | null;
@@ -74,6 +73,43 @@ interface ResumeStore {
 }
 
 type PersistedResumeStore = Pick<ResumeStore, "resumes" | "activeResumeId">;
+
+const localeText: Record<
+  Locale,
+  { newResume: string; copy: string; untitledSection: string }
+> = {
+  zh: {
+    newResume: "新建简历",
+    copy: "复制",
+    untitledSection: "未命名模块",
+  },
+  en: {
+    newResume: "New Resume",
+    copy: "Copy",
+    untitledSection: "Untitled section",
+  },
+  ru: {
+    newResume: "Новое резюме",
+    copy: "Копия",
+    untitledSection: "Новый блок",
+  },
+};
+
+const resolveLocale = (value: string | undefined): Locale =>
+  locales.includes(value as Locale) ? (value as Locale) : defaultLocale;
+
+const getCurrentLocale = (): Locale => {
+  if (typeof document === "undefined") {
+    return defaultLocale;
+  }
+
+  const cookieLocale = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("NEXT_LOCALE="))
+    ?.split("=")[1];
+
+  return resolveLocale(cookieLocale);
+};
 
 const parseTimestamp = (value?: string): number | null => {
   if (!value) {
@@ -208,22 +244,10 @@ export const useResumeStore = create(
       activeResume: null,
 
       createResume: (templateId = null, isBlank = false) => {
-        const locale =
-          typeof document !== "undefined"
-            ? document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("NEXT_LOCALE="))
-                ?.split("=")[1] || "zh"
-            : "zh";
-
-        let initialResumeData: any;
-        if (isBlank) {
-          initialResumeData =
-            locale === "en" ? blankResumeStateEn : blankResumeState;
-        } else {
-          initialResumeData =
-            locale === "en" ? initialResumeStateEn : initialResumeState;
-        }
+        const locale = getCurrentLocale();
+        const initialResumeData = isBlank
+          ? BLANK_RESUME_BY_LOCALE[locale]
+          : INITIAL_RESUME_BY_LOCALE[locale];
 
         const id = generateUUID();
         const template = templateId
@@ -236,10 +260,7 @@ export const useResumeStore = create(
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           templateId: template?.id,
-          title: `${locale === "en" ? "New Resume" : "新建简历"} ${id.slice(
-            0,
-            6
-          )}`,
+          title: `${localeText[locale].newResume} ${id.slice(0, 6)}`,
         };
 
         set((state) => ({
@@ -349,20 +370,12 @@ export const useResumeStore = create(
         }
 
         // 获取当前语言环境
-        const locale =
-          typeof document !== "undefined"
-            ? document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("NEXT_LOCALE="))
-                ?.split("=")[1] || "zh"
-            : "zh";
+        const locale = getCurrentLocale();
 
         const duplicatedResume = {
           ...structuredClone(originalResume),
           id: newId,
-          title: `${originalResume.title} (${
-            locale === "en" ? "Copy" : "复制"
-          })`,
+          title: `${originalResume.title} (${localeText[locale].copy})`,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -591,7 +604,7 @@ export const useResumeStore = create(
             [sectionId]: [
               {
                 id: generateUUID(),
-                title: "未命名模块",
+                title: localeText[getCurrentLocale()].untitledSection,
                 subtitle: "",
                 dateRange: "",
                 description: "",
@@ -634,7 +647,7 @@ export const useResumeStore = create(
               ...(currentResume.customData[sectionId] || []),
               {
                 id: generateUUID(),
-                title: "未命名模块",
+                title: localeText[getCurrentLocale()].untitledSection,
                 subtitle: "",
                 dateRange: "",
                 description: "",

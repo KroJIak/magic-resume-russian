@@ -4,6 +4,8 @@ import Mark from "mark.js";
 import { useAIConfigStore } from "@/store/useAIConfigStore";
 import { AI_MODEL_CONFIGS } from "@/config/ai";
 import { cn } from "@/lib/utils";
+import { getPreferredLocale } from "@/i18n/runtime";
+import { getMessage } from "@/i18n/messages";
 
 export interface GrammarError {
   context: string;
@@ -90,6 +92,12 @@ export const useGrammarStore = create<GrammarStore>((set, get) => ({
     set((state) => ({ highlightKey: state.highlightKey + 1 })),
 
   checkGrammar: async (text: string) => {
+    const locale =
+      typeof window !== "undefined"
+        ? getPreferredLocale(window.location.pathname)
+        : "zh";
+    const message = (path: string, fallback: string) =>
+      getMessage(locale, path, fallback);
     const {
       selectedModel,
       doubaoApiKey,
@@ -144,13 +152,18 @@ export const useGrammarStore = create<GrammarStore>((set, get) => ({
 
       const data = await response.json();
 
-      if (data.error) {
-        toast.error(data.error.message);
+      if (data.error?.code === "AuthenticationError") {
+        toast.error(
+          message(
+            "previewDock.grammarCheck.authFailed",
+            "API key or model ID is incorrect"
+          )
+        );
         throw new Error(data.error.message);
       }
 
-      if (data.error?.code === "AuthenticationError") {
-        toast.error("ApiKey 或 模型Id 不正确");
+      if (data.error) {
+        toast.error(data.error.message);
         throw new Error(data.error.message);
       }
 
@@ -160,7 +173,12 @@ export const useGrammarStore = create<GrammarStore>((set, get) => ({
         const grammarErrors = JSON.parse(aiResponse);
         if (grammarErrors.errors.length === 0) {
           set({ errors: [] });
-          toast.success("无语法错误");
+          toast.success(
+            message(
+              "previewDock.grammarCheck.noErrors",
+              "No spelling or punctuation issues found"
+            )
+          );
           return;
         }
         set({ errors: grammarErrors.errors });
@@ -175,7 +193,12 @@ export const useGrammarStore = create<GrammarStore>((set, get) => ({
           });
         }
       } catch (parseError) {
-        toast.error(`解析AI响应失败: ${parseError}`);
+        toast.error(
+          `${message(
+            "previewDock.grammarCheck.parseFailed",
+            "Failed to parse AI response"
+          )}: ${String(parseError)}`
+        );
         set({ errors: [] });
       }
     } catch (error) {

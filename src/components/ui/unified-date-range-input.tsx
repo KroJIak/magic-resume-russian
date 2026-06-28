@@ -4,6 +4,7 @@ import { HeroUIProvider } from "@heroui/react";
 import { CalendarDate, parseDate } from "@internationalized/date";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useLocale, useTranslations } from "@/i18n/compat/client";
 
 interface UnifiedDateRangeInputProps {
   value: string;
@@ -14,7 +15,12 @@ interface UnifiedDateRangeInputProps {
 }
 
 const SEPARATOR = " - ";
-const PRESENT_VALUES = new Set(["至今", "Present", "Now"]);
+const PRESENT_VALUES = new Set(["至今", "Present", "Now", "По настоящее время"]);
+const HERO_UI_LOCALES = {
+  zh: "zh-CN",
+  en: "en-US",
+  ru: "ru-RU",
+} as const;
 
 const parsePart = (part: string): CalendarDate | null => {
   if (!part) return null;
@@ -57,11 +63,16 @@ export function UnifiedDateRangeInput({
   onChange,
   className,
 }: UnifiedDateRangeInputProps) {
+  const locale = useLocale();
+  const t = useTranslations("field");
   const [range, setRange] = useState<{ start: CalendarDate | null; end: CalendarDate | null }>(
     () => parseRange(value)
   );
 
-  const isPresent = value.includes("至今") || value.includes("Present");
+  const presentLabel = t("toPresent");
+  const isPresent = [...PRESENT_VALUES].some((presentValue) =>
+    value.includes(presentValue)
+  );
 
   const updateValue = (
     newStart: CalendarDate | null,
@@ -71,7 +82,9 @@ export function UnifiedDateRangeInput({
       `${d.year}/${d.month.toString().padStart(2, "0")}`;
 
     const startStr = newStart ? format(newStart) : "";
-    const endStr = isPresent ? (value.includes("至今") ? "至今" : "Present") : (newEnd ? format(newEnd) : "");
+    const endStr = isPresent
+      ? presentLabel
+      : (newEnd ? format(newEnd) : "");
 
     if (!startStr && !endStr) {
       onChange("");
@@ -104,7 +117,7 @@ export function UnifiedDateRangeInput({
 
   return (
     <div className={cn("w-full", className)}>
-      <HeroUIProvider locale="ja-JP">
+      <HeroUIProvider locale={HERO_UI_LOCALES[locale as keyof typeof HERO_UI_LOCALES] ?? "en-US"}>
         <div className="flex items-center gap-2">
           <div className="flex-1">
             <DateInput
@@ -113,7 +126,7 @@ export function UnifiedDateRangeInput({
               variant="bordered"
               granularity={"month" as any}
               shouldForceLeadingZeros
-              aria-label="Start Date"
+              aria-label={t("startDate")}
               classNames={{
                 inputWrapper:
                   "bg-background hover:bg-muted/20 h-9 min-h-0 py-0 px-3 shadow-sm ring-1 ring-inset ring-input border-0",
@@ -129,7 +142,7 @@ export function UnifiedDateRangeInput({
               variant="bordered"
               granularity={"month" as any}
               shouldForceLeadingZeros
-              aria-label="End Date"
+              aria-label={t("endDate")}
               isDisabled={isPresent}
               className={cn(isPresent && "opacity-50")}
               classNames={{

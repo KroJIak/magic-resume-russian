@@ -17,7 +17,7 @@ const DeepSeekLogo = ({
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      aria-label="DeepSeek Logo"
+      aria-label="DeepSeek"
       {...props}
     >
       <title>DeepSeek</title>

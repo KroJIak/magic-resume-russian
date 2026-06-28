@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { PlusCircle, GripVertical, Trash2, Eye, EyeOff } from "lucide-react";
 import { Reorder, AnimatePresence, motion } from "framer-motion";
-import { useTranslations } from "@/i18n/compat/client";
+import { useLocale, useTranslations } from "@/i18n/compat/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -10,7 +10,7 @@ import IconSelector from "../IconSelector";
 import AlignSelector from "./AlignSelector";
 import Field from "../Field";
 import { cn } from "@/lib/utils";
-import { DEFAULT_FIELD_ORDER } from "@/config";
+import { getDefaultFieldOrder } from "@/config";
 import { useResumeStore } from "@/store/useResumeStore";
 import { BasicFieldType, CustomFieldType } from "@/types/resume";
 import { generateUUID } from "@/utils/uuid";
@@ -157,6 +157,7 @@ const CustomField: React.FC<CustomFieldProps> = ({
 const BasicPanel: React.FC = () => {
   const { activeResume, updateBasicInfo } = useResumeStore();
   const { basic } = activeResume || {};
+  const locale = useLocale();
   const [customFields, setCustomFields] = useState<CustomFieldType[]>(
     basic?.customFields?.map((field) => ({
       ...field,
@@ -165,7 +166,7 @@ const BasicPanel: React.FC = () => {
   );
   const [basicFields, setBasicFields] = useState<BasicFieldType[]>(() => {
     if (!basic?.fieldOrder) {
-      return DEFAULT_FIELD_ORDER;
+      return getDefaultFieldOrder(locale as any);
     }
     return basic.fieldOrder.map((field) => ({
       ...field,
@@ -334,7 +335,7 @@ const BasicPanel: React.FC = () => {
                     [field.key]: value,
                   })
                 }
-                placeholder={`请输入${field.label}`}
+                placeholder={t(`basicFields.${field.key}`)}
                 type={field.type}
               />
             </div>
@@ -488,9 +489,9 @@ const BasicPanel: React.FC = () => {
 
                     <div className="mt-4">
                       <div className="flex items-center ml-3 space-x-2">
-                        <div className=" w-[110px]">Access Token</div>
+                        <div className=" w-[110px]">{t("githubTokenLabel")}</div>
                         <Input
-                          placeholder="请输入github access token"
+                          placeholder={t("githubTokenPlaceholder")}
                           className="flex-1"
                           value={basic?.githubKey}
                           onChange={(e) =>
@@ -502,10 +503,10 @@ const BasicPanel: React.FC = () => {
                         />
                       </div>
                       <div className="flex items-center ml-3 mt-4 space-x-2">
-                        <div className="w-[110px]">UseName</div>
+                        <div className="w-[110px]">{t("githubUsernameLabel")}</div>
                         <Input
                           className="flex-1"
-                          placeholder="请输入github username"
+                          placeholder={t("githubUsernamePlaceholder")}
                           value={basic?.githubUseName}
                           onChange={(e) =>
                             updateBasicInfo({

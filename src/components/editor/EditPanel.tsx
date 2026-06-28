@@ -11,6 +11,7 @@ import CustomPanel from "./custom/CustomPanel";
 import SkillPanel from "./skills/SkillPanel";
 import SelfEvaluationPanel from "./self-evaluation/SelfEvaluationPanel";
 import CertificatesPanel from "./certificates/CertificatesPanel";
+import { useTranslations } from "@/i18n/compat/client";
 import {
   Tooltip,
   TooltipContent,
@@ -20,6 +21,7 @@ import {
 
 export function EditPanel() {
   const { activeResume, updateMenuSections } = useResumeStore();
+  const t = useTranslations("workbench.editPanel");
   if (!activeResume) return;
   const { activeSection = "", menuSections = [] } = activeResume || {};
 
@@ -104,7 +106,7 @@ export function EditPanel() {
                       <Pencil size={16} className="text-primary" />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>点击文字部分即可聚焦编辑</p>
+                      <p>{t("focusHint")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

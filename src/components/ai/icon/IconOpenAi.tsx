@@ -17,7 +17,7 @@ const OpenAiLogo = ({
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
             className={className}
-            aria-label="OpenAi Logo"
+            aria-label="OpenAI"
             {...props}
         >
             <title>OpenAi</title>

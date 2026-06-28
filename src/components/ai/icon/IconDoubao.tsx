@@ -17,7 +17,7 @@ const DoubaoLogo = ({
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      aria-label="Doubao Logo"
+      aria-label="Doubao"
       {...props}
     >
       <title>Doubao</title>

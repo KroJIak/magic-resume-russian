@@ -28,7 +28,7 @@ const BaseInfo = ({ basic = {} as BasicInfo, globalSettings, template }: BaseInf
 
     const getOrderedFields = React.useMemo(() => {
         if (!basic.fieldOrder) {
-            return [{ key: "email", value: basic.email, icon: basic.icons?.email || "Mail", label: "电子邮箱", visible: true, custom: false }]
+            return [{ key: "email", value: basic.email, icon: basic.icons?.email || "Mail", visible: true, custom: false }]
                 .filter((item) => Boolean(item.value && item.visible));
         }
         return basic.fieldOrder
@@ -38,7 +38,7 @@ const BaseInfo = ({ basic = {} as BasicInfo, globalSettings, template }: BaseInf
                 icon: basic.icons?.[field.key] || "User", label: field.label, visible: field.visible, custom: field.custom,
             }))
             .filter((item) => Boolean(item.value));
-    }, [basic]);
+    }, [basic, locale]);
 
     const allFields = [
         ...getOrderedFields,
@@ -47,13 +47,13 @@ const BaseInfo = ({ basic = {} as BasicInfo, globalSettings, template }: BaseInf
         })) || []),
     ];
 
-    const nameField = basic.fieldOrder?.find((f) => f.key === "name") || { key: "name", label: "姓名", visible: true };
-    const titleField = basic.fieldOrder?.find((f) => f.key === "title") || { key: "title", label: "职位", visible: true };
+    const nameField = basic.fieldOrder?.find((f) => f.key === "name") || { key: "name", visible: true };
+    const titleField = basic.fieldOrder?.find((f) => f.key === "title") || { key: "title", visible: true };
 
     const PhotoComponent = basic.photo && basic.photoConfig?.visible && (
         <motion.div layout="position">
             <div style={{ width: `${basic.photoConfig?.width || 100}px`, height: `${basic.photoConfig?.height || 100}px`, borderRadius: getBorderRadiusValue(basic.photoConfig || { borderRadius: "none", customBorderRadius: 0 }), overflow: "hidden" }}>
-                <img src={basic.photo} alt={`${basic.name}'s photo`} className="w-full h-full object-cover" />
+                <img src={basic.photo} alt={basic.name ? `${basic.name} - ${t("basicPanel.photoAlt")}` : t("basicPanel.photoAlt")} className="w-full h-full object-cover" />
             </div>
         </motion.div>
     );

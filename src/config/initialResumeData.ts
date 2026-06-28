@@ -1,4 +1,4 @@
-import { DEFAULT_FIELD_ORDER } from "./constants";
+import { getDefaultFieldOrder } from "./constants";
 import { GlobalSettings, DEFAULT_CONFIG, ResumeData } from "../types/resume";
 const initialGlobalSettings: GlobalSettings = {
   baseFontSize: 16,
@@ -23,7 +23,7 @@ export const initialResumeState = {
     phone: "13800138000",
     location: "北京市朝阳区",
     birthDate: "2025-01",
-    fieldOrder: DEFAULT_FIELD_ORDER,
+    fieldOrder: getDefaultFieldOrder("zh"),
     icons: {
       email: "Mail",
       phone: "Phone",
@@ -180,7 +180,7 @@ export const initialResumeStateEn = {
     phone: "555-123-4567",
     location: "San Francisco, CA",
     birthDate: "",
-    fieldOrder: DEFAULT_FIELD_ORDER,
+    fieldOrder: getDefaultFieldOrder("en"),
     icons: {
       email: "Mail",
       phone: "Phone",
@@ -331,6 +331,172 @@ export const initialResumeStateEn = {
   globalSettings: initialGlobalSettings,
 };
 
+export const initialResumeStateRu = {
+  title: "Новое резюме",
+  basic: {
+    name: "Анна Смирнова",
+    title: "Старший frontend-инженер",
+    employementStatus: "Открыта к предложениям",
+    email: "anna.smirnova@example.com",
+    phone: "+7 999 123-45-67",
+    location: "Москва, Россия",
+    birthDate: "",
+    fieldOrder: getDefaultFieldOrder("ru"),
+    icons: {
+      email: "Mail",
+      phone: "Phone",
+      birthDate: "CalendarRange",
+      employementStatus: "Briefcase",
+      location: "MapPin",
+    },
+    photoConfig: DEFAULT_CONFIG,
+    customFields: [
+      {
+        id: "portfolio",
+        label: "Портфолио",
+        value: "https://annasmirnova.dev",
+        icon: "Globe",
+      },
+    ],
+    photo: "/avatar.png",
+    githubKey: "",
+    githubUseName: "",
+    githubContributionsVisible: false,
+  },
+  education: [
+    {
+      id: "1",
+      school: "МГТУ им. Н. Э. Баумана",
+      major: "Программная инженерия",
+      degree: "",
+      startDate: "2013-09",
+      endDate: "2017-06",
+      visible: true,
+      gpa: "",
+      description: `<ul>
+        <li>Ключевые дисциплины: структуры данных, алгоритмы, операционные системы, компьютерные сети, веб-разработка</li>
+        <li>Вошла в топ-5% потока, три года подряд получала академическую стипендию</li>
+        <li>Руководила техническим направлением студенческого IT-клуба и проводила внутренние митапы</li>
+        <li>Участвовала в open-source проектах и развивала инженерную культуру команды</li>
+      </ul>`,
+    },
+  ],
+  skillContent: `<div class="skill-content">
+  <ul>
+    <li>Frontend: React, Vue.js, Next.js, Nuxt.js и другие SSR-фреймворки</li>
+    <li>Языки: TypeScript, JavaScript (ES6+), HTML5, CSS3</li>
+    <li>UI и стили: Tailwind CSS, Sass/Less, CSS Modules, Styled Components</li>
+    <li>Управление состоянием: Redux, Vuex, Zustand, Jotai, React Query</li>
+    <li>Инструменты сборки: Webpack, Vite, Rollup, Babel, ESLint</li>
+    <li>Тестирование: Jest, React Testing Library, Cypress</li>
+    <li>Производительность: оптимизация рендера, code splitting, lazy loading, мониторинг метрик</li>
+    <li>Контроль версий: Git, SVN</li>
+    <li>Техническое лидерство: архитектурные решения, менторинг, развитие инженерных процессов</li>
+  </ul>
+</div>`,
+  selfEvaluationContent: "",
+  experience: [
+    {
+      id: "1",
+      company: "Яндекс",
+      position: "Старший frontend-инженер",
+      date: "2021.07 - 2024.12",
+      visible: true,
+      details: `<ul>
+      <li>Отвечала за развитие внутренней платформы для создателей контента и проектирование ключевых пользовательских сценариев</li>
+      <li>Оптимизировала конфигурацию сборки и сократила время сборки с 8 до 2 минут</li>
+      <li>Спроектировала и внедрила библиотеку компонентов, повысив переиспользование кода на 70%</li>
+      <li>Запустила программу оптимизации производительности и сократила время первой отрисовки на 50%</li>
+      <li>Менторила младших разработчиков и вела технические разборы внутри команды</li>
+    </ul>`,
+    },
+  ],
+  draggingProjectId: null,
+  projects: [
+    {
+      id: "p1",
+      name: "Платформа аналитики для авторов",
+      role: "Frontend Lead",
+      date: "2022.06 - 2023.12",
+      description: `<ul>
+        <li>Платформа аналитики и управления контентом для крупных авторов и редакторских команд</li>
+        <li>Включает подсистемы аналитики, управления публикациями и отчетности по доходам</li>
+        <li>Для сложных сценариев данных использован Redux и детально продуманные потоки состояния</li>
+        <li>На базе единой компонентной системы удалось выровнять UX и ускорить разработку новых модулей</li>
+        <li>Code splitting и lazy loading заметно снизили время загрузки тяжелых экранов</li>
+      </ul>`,
+      visible: true,
+    },
+    {
+      id: "p2",
+      name: "Набор инструментов для разработчиков",
+      role: "Core Developer",
+      date: "2020.03 - 2021.06",
+      description: `<ul>
+        <li>Единое desktop-приложение для разработки, отладки и релиза клиентских мини-приложений</li>
+        <li>Кроссплатформенная архитектура на Electron для Windows, macOS и Linux</li>
+        <li>Встроены инструменты логирования ошибок и анализа производительности</li>
+        <li>Реализована расширяемость через плагины и SDK для команд разработки</li>
+      </ul>`,
+      visible: true,
+    },
+    {
+      id: "p3",
+      name: "Платформа мониторинга фронтенда",
+      role: "Технический руководитель",
+      date: "2021.09 - 2022.05",
+      description: `<ul>
+        <li>Полноценное решение для мониторинга ошибок, производительности и пользовательского поведения</li>
+        <li>Интерфейс на Vue и Element UI с визуализацией метрик в реальном времени</li>
+        <li>Поддерживаются дашборды по ошибкам, производительности и качеству пользовательских сценариев</li>
+        <li>Команда получила удобные инструменты диагностики и ускорила поиск деградаций в продакшене</li>
+      </ul>`,
+      visible: true,
+    },
+  ],
+  menuSections: [
+    {
+      id: "basic",
+      title: "Профиль",
+      icon: "👤",
+      enabled: true,
+      order: 0,
+    },
+    {
+      id: "skills",
+      title: "Навыки",
+      icon: "⚡",
+      enabled: true,
+      order: 1,
+    },
+    {
+      id: "experience",
+      title: "Опыт работы",
+      icon: "💼",
+      enabled: true,
+      order: 2,
+    },
+    {
+      id: "projects",
+      title: "Проекты",
+      icon: "🚀",
+      enabled: true,
+      order: 3,
+    },
+    {
+      id: "education",
+      title: "Образование",
+      icon: "🎓",
+      enabled: true,
+      order: 4,
+    },
+  ],
+  certificates: [],
+  customData: {},
+  activeSection: "basic",
+  globalSettings: initialGlobalSettings,
+};
+
 export const blankResumeState = {
   ...initialResumeState,
   title: "新建简历",
@@ -378,3 +544,39 @@ export const blankResumeStateEn = {
   certificates: [],
   menuSections: [initialResumeStateEn.menuSections[0]],
 };
+
+export const blankResumeStateRu = {
+  ...initialResumeStateRu,
+  title: "Новое резюме",
+  basic: {
+    ...initialResumeStateRu.basic,
+    name: "",
+    title: "",
+    email: "",
+    phone: "",
+    location: "",
+    birthDate: "",
+    employementStatus: "",
+    photo: "",
+    customFields: [],
+  },
+  education: [],
+  skillContent: "",
+  selfEvaluationContent: "",
+  experience: [],
+  projects: [],
+  certificates: [],
+  menuSections: [initialResumeStateRu.menuSections[0]],
+};
+
+export const INITIAL_RESUME_BY_LOCALE = {
+  zh: initialResumeState,
+  en: initialResumeStateEn,
+  ru: initialResumeStateRu,
+} as const;
+
+export const BLANK_RESUME_BY_LOCALE = {
+  zh: blankResumeState,
+  en: blankResumeStateEn,
+  ru: blankResumeStateRu,
+} as const;

@@ -13,7 +13,9 @@
     "deleteSuccess": "删除成功",
     "deleteModuleConfirm": "确定要删除此模块吗？此操作无法撤销。",
     "configured": "已配置",
-    "notConfigured": "未配置"
+    "notConfigured": "未配置",
+    "toggleSidebar": "切换侧边栏",
+    "logoAlt": "Magic Resume 标志"
   },
   "home": {
     "header": {
@@ -31,7 +33,8 @@
       "title": "让简历制作变得简单而智能",
       "subtitle": "魔方简历利用 AI 技术，帮助您快速创建专业的简历。无需注册，免费使用，数据安全存储。",
       "cta": "立即开始",
-      "secondary": "浏览模板"
+      "secondary": "浏览模板",
+      "previewAlt": "简历编辑器预览"
     },
     "features": {
       "title": "为什么选择魔方简历？",
@@ -176,7 +179,9 @@
         "currentSyncFolder": "当前同步文件夹",
         "noFolderConfigured": "尚未配置同步文件夹",
         "changeFolder": "更改文件夹",
-        "selectFolder": "选择文件夹"
+        "selectFolder": "选择文件夹",
+        "browserUnsupported": "当前浏览器不支持选择文件夹，请使用较新的浏览器。",
+        "removeFolder": "移除已同步目录"
       },
       "sync": {
         "title": "同步目录",
@@ -219,6 +224,16 @@
       "useTemplate": "使用此模板",
       "preview": "预览",
       "switchTemplate": "切换模板",
+      "colors": {
+        "default": "默认",
+        "blue": "蓝色",
+        "green": "绿色",
+        "purple": "紫色",
+        "orange": "橙色",
+        "red": "红色",
+        "slate": "石板灰",
+        "black": "黑色"
+      },
       "classic": {
         "name": "经典模板",
         "description": "传统简约的简历布局，适合大多数求职场景"
@@ -293,6 +308,7 @@
         "title": "布局",
         "addCustomSection": "添加模块",
         "addCustomSectionOption": "添加自定义模块",
+        "customSectionDefaultTitle": "新模块",
         "standardSections": {
           "skills": "专业技能",
           "experience": "工作经验",
@@ -355,10 +371,15 @@
         "flexibleHeaderLayout": {
           "title": "长标题模式"
         }
+      },
+      "adjust": {
+        "increase": "增加数值",
+        "decrease": "减少数值"
       }
     },
     "basicPanel": {
       "title": "资料",
+      "photoAlt": "个人照片",
       "basicField": "基础字段",
       "customField": "自定义字段",
       "githubContributions": "Github贡献",
@@ -388,7 +409,11 @@
       "fieldVisibility": {
         "show": "显示",
         "hide": "隐藏"
-      }
+      },
+      "githubTokenLabel": "GitHub Token",
+      "githubTokenPlaceholder": "输入 GitHub 个人访问令牌",
+      "githubUsernameLabel": "GitHub 用户名",
+      "githubUsernamePlaceholder": "输入 GitHub 用户名"
     },
     "experiencePanel": {
       "title": "工作经历",
@@ -428,7 +453,8 @@
       "visibility": {
         "show": "显示",
         "hide": "隐藏"
-      }
+      },
+      "emptyCompany": "未命名公司"
     },
     "projectPanel": {
       "title": "项目经历",
@@ -455,6 +481,7 @@
         "role": "项目角色",
         "date": "项目时间",
         "description": "项目描述",
+        "technologies": "技术栈",
         "link": "项目链接",
         "linkLabel": "显示文字"
       },
@@ -463,6 +490,7 @@
         "role": "你在项目中的角色",
         "date": "项目时间范围",
         "description": "简要描述项目背景和目标",
+        "technologies": "使用的技术和工具",
         "link": "项目链接",
         "linkLabel": "显示文字"
       },
@@ -478,7 +506,8 @@
       "visibility": {
         "show": "显示",
         "hide": "隐藏"
-      }
+      },
+      "untitled": "未命名项目"
     },
     "educationPanel": {
       "title": "教育背景",
@@ -504,6 +533,7 @@
         "date": "就读时间",
         "description": "学校简介",
         "gpa": "GPA",
+        "location": "地点",
         "startDate": "开始时间",
         "endDate": "结束时间"
       },
@@ -512,8 +542,10 @@
         "degree": "请选择学历",
         "major": "请输入专业名称",
         "date": "请输入就读时间范围",
+        "yearMonth": "YYYY-MM",
         "description": "请输入学校简介",
-        "gpa": "请输入GPA"
+        "gpa": "请输入GPA",
+        "location": "请输入地点"
       },
       "buttons": {
         "edit": "编辑",
@@ -524,7 +556,8 @@
       "visibility": {
         "show": "显示",
         "hide": "隐藏"
-      }
+      },
+      "emptySchool": "未命名学校"
     },
     "certificatesPanel": {
       "title": "证书作品",
@@ -532,13 +565,51 @@
       "tips": "支持点击上传或快捷键 (Cmd/Ctrl + V) 直接粘贴图片。拖动滑块可调整宽度实现横向拼接。",
       "width": "宽度 (横向拼接占比)",
       "delete": "删除",
-      "empty": "暂无图片，请上传或粘贴图片"
+      "empty": "暂无图片，请上传或粘贴图片",
+      "formatError": "不支持的文件格式",
+      "uploadError": "图片上传失败",
+      "imageAlt": "证书图片"
+    },
+    "editPanel": {
+      "focusHint": "点击标题可重命名该模块"
+    },
+    "customPanel": {
+      "addButton": "添加条目"
+    },
+    "customItem": {
+      "labels": {
+        "title": "标题",
+        "subtitle": "副标题",
+        "dateRange": "时间范围",
+        "description": "描述"
+      },
+      "placeholders": {
+        "title": "请输入标题",
+        "subtitle": "请输入副标题",
+        "dateRange": "请输入时间范围",
+        "description": "请输入条目描述"
+      },
+      "untitled": "未命名条目"
+    },
+    "selfEvaluationPanel": {
+      "placeholder": "概括你的优势、定位与关键成果"
+    },
+    "skillPanel": {
+      "placeholder": "填写核心技能、工具和技术优势"
+    },
+    "mobile": {
+      "content": "内容",
+      "style": "样式",
+      "preview": "预览",
+      "basicSection": "基本信息"
     }
   },
   "field": {
     "selectDate": "选择日期",
     "enterYear": "输入年份",
-    "toPresent": "至今"
+    "toPresent": "至今",
+    "startDate": "开始日期",
+    "endDate": "结束日期"
   },
   "richEditor": {
     "bold": "加粗",
@@ -636,6 +707,7 @@
       "music": "音乐",
       "art": "艺术",
       "photography": "摄影",
+      "github": "GitHub",
       "linkedin": "领英",
       "twitter": "推特",
       "facebook": "脸书",
@@ -659,6 +731,7 @@
   "photoConfig": {
     "title": "头像设置",
     "description": "自定义您的简历头像",
+    "photoAlt": "个人照片",
     "upload": {
       "title": "在线链接",
       "dragHint": "拖拽或点击上传图片",
@@ -666,6 +739,7 @@
       "typeLimit": "请上传图片文件",
       "urlPlaceholder": "输入图片链接",
       "invalidUrl": "图片链接无效或无法访问，请尝试使用其他图片链接",
+      "error": "图片处理失败",
       "timeout": "加载超时",
       "loadError": "图片加载失败"
     },
@@ -706,7 +780,10 @@
       "checking": "检查中...",
       "configurePrompt": "请先配置 ApiKey 和 模型Id",
       "configureButton": "去配置",
-      "errorToast": "语法检查失败，请重试"
+      "errorToast": "语法检查失败，请重试",
+      "authFailed": "API Key 或模型 ID 不正确",
+      "noErrors": "未发现错别字或标点问题",
+      "parseFailed": "解析 AI 响应失败"
     },
     "sidePanel": {
       "expand": "展开侧边栏",
@@ -744,7 +821,8 @@
       "configured": "已备份",
       "notConfigured": "未备份",
       "clickToConfigure": "点击前往设置"
-    }
+    },
+    "pageBreakEnd": "第 {pageNumber} 页结束"
   },
   "aiPolishDialog": {
     "title": "AI 润色",
@@ -756,7 +834,9 @@
     "error": {
       "configRequired": "请先配置 AI 模型",
       "polishFailed": "润色失败",
-      "applied": "已应用润色内容"
+      "applied": "已应用润色内容",
+      "authFailed": "认证失败（401），请检查 API Key、模型和 API Endpoint 配置。",
+      "noResponseBody": "服务器返回了空响应体"
     },
     "content": {
       "original": "原始内容",

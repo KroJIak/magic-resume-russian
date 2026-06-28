@@ -113,7 +113,7 @@ const PhotoConfigDrawer: React.FC<Props> = ({
           }
 
           console.log(
-            `原始图片大小: ${(file.size / 1024).toFixed(2)}KB, 压缩后大小: ${(
+            `Original image size: ${(file.size / 1024).toFixed(2)}KB, compressed size: ${(
               estimateBase64Size(imageData) / 1024
             ).toFixed(2)}KB`
           );
@@ -203,11 +203,7 @@ const PhotoConfigDrawer: React.FC<Props> = ({
       });
       onPhotoChange(url, config);
     } catch (error) {
-      toast.error(
-        t("upload.invalidUrl", {
-          defaultMessage: "图片链接无效或无法访问，请尝试使用其他图片链接",
-        })
-      );
+      toast.error(t("upload.invalidUrl"));
       handleRemovePhoto();
     }
   };
@@ -354,7 +350,7 @@ const PhotoConfigDrawer: React.FC<Props> = ({
               <div className="relative h-full group">
                 <img
                   src={previewUrl}
-                  alt="Profile"
+                  alt={t("photoAlt")}
                   className="w-full h-full object-cover"
                 />
                 <div

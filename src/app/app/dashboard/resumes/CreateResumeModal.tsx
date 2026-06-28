@@ -9,7 +9,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DEFAULT_TEMPLATES } from "@/config";
-import { initialResumeState } from "@/config/initialResumeData";
+import {
+    INITIAL_RESUME_BY_LOCALE,
+    initialResumeState,
+} from "@/config/initialResumeData";
 import ResumeTemplateComponent from "@/components/templates";
 import { useTemplateSnapshots } from "@/hooks/useTemplateSnapshots";
 import type { Translator } from "@/i18n/compat/utils";
@@ -124,6 +127,10 @@ const TemplateThumbnail = ({
         return <BlankTemplateThumbnail t={t} />;
     }
 
+    const baseData =
+        INITIAL_RESUME_BY_LOCALE[locale as keyof typeof INITIAL_RESUME_BY_LOCALE] ||
+        initialResumeState;
+
     const sampleExperience = quality === "high"
         ? [
             {
@@ -138,20 +145,20 @@ const TemplateThumbnail = ({
         : [];
 
     const previewData: ResumeData = {
-        ...initialResumeState,
+        ...baseData,
         id: "preview-mock",
         templateId: template.id,
         createdAt: new Date(0).toISOString(),
         updatedAt: new Date(0).toISOString(),
         globalSettings: {
-            ...initialResumeState.globalSettings,
+            ...baseData.globalSettings,
             themeColor: template.colorScheme?.primary || "#000",
             sectionSpacing: template.spacing?.sectionGap || 16,
             paragraphSpacing: template.spacing?.itemGap || 8,
             pagePadding: template.spacing?.contentPadding || 32,
         },
         basic: {
-            ...initialResumeState.basic,
+            ...baseData.basic,
             layout: (template.basic?.layout as any) || "left",
         },
         // Feed richer mock content in large preview.

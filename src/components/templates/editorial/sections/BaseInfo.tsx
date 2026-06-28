@@ -88,7 +88,7 @@ const BaseInfo: React.FC<BaseInfoProps> = ({ basic, globalSettings }) => {
                   overflow: "hidden",
                 }}
               >
-                <img src={basic.photo} alt={`${basic.name}'s photo`} className="w-full h-full object-cover" />
+                <img src={basic.photo} alt={basic.name ? `${basic.name} - ${t("basicPanel.photoAlt")}` : t("basicPanel.photoAlt")} className="w-full h-full object-cover" />
               </div>
             </motion.div>
           )}

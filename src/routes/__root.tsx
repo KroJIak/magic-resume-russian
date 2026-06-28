@@ -10,11 +10,11 @@ import appFontCss from "../app/font.css?url";
 import tiptapCss from "../styles/tiptap.scss?url";
 import { NextIntlClientProvider } from "@/i18n/compat/client";
 import { useEffect } from "react";
-import zhMessages from "@/i18n/locales/zh.json";
-import enMessages from "@/i18n/locales/en.json";
 import { Providers } from "@/app/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { getPreferredLocale } from "@/i18n/runtime";
+import { defaultLocale } from "@/i18n/config";
+import { messagesByLocale } from "@/i18n/messages";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -50,7 +50,7 @@ function RootComponent() {
     select: (location) => location.pathname
   });
   const locale = getPreferredLocale(pathname);
-  const messages = locale === "en" ? enMessages : zhMessages;
+  const messages = messagesByLocale[locale] ?? messagesByLocale[defaultLocale];
 
   useEffect(() => {
     document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000`;
@@ -81,9 +81,20 @@ function RootComponent() {
 }
 
 function RootNotFound() {
+  const pathname = useLocation({
+    select: (location) => location.pathname
+  });
+  const locale = getPreferredLocale(pathname);
+  const message =
+    locale === "en"
+      ? "Page not found"
+      : locale === "ru"
+        ? "Страница не найдена"
+        : "页面不存在";
+
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <p className="text-muted-foreground">页面不存在</p>
+      <p className="text-muted-foreground">{message}</p>
     </main>
   );
 }

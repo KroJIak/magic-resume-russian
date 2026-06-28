@@ -1,23 +1,44 @@
-import { getRequestConfig } from "@/i18n/compat/server";
-import { defaultLocale, locales } from "./config";
-import { getUserLocale } from "./db";
+import { defaultLocale, Locale, locales } from "./config";
+import { getLocaleFromPathname } from "./runtime";
 
-export default getRequestConfig(async ({ requestLocale }) => {
-  // Read from potential `[locale]` segment
-  let locale = await requestLocale;
+const resolveLocale = (value: string | null | undefined): Locale | null =>
+  locales.includes(value as Locale) ? (value as Locale) : null;
 
-  if (!locale) {
-    // The user is logged in
-    locale = await getUserLocale();
+const getLocaleFromCookieHeader = (
+  cookieHeader: string | null | undefined
+): Locale | null => {
+  if (!cookieHeader) {
+    return null;
   }
 
-  // Ensure that the incoming locale is valid
-  if (!locales.includes(locale as any)) {
-    locale = defaultLocale;
+  const locale = cookieHeader
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith("NEXT_LOCALE="))
+    ?.split("=")[1];
+
+  return resolveLocale(locale);
+};
+
+export const getRequestLocale = (
+  request: Pick<Request, "headers"> & Partial<Pick<Request, "url">>
+): Locale => {
+  const cookieLocale = getLocaleFromCookieHeader(request.headers.get("cookie"));
+  if (cookieLocale) {
+    return cookieLocale;
   }
 
-  return {
-    locale,
-    messages: (await import(`./locales/${locale}.json`)).default,
-  };
-});
+  const referer = request.headers.get("referer");
+  if (referer) {
+    try {
+      const refererLocale = getLocaleFromPathname(new URL(referer).pathname);
+      if (refererLocale) {
+        return refererLocale;
+      }
+    } catch {
+      // Ignore invalid referer URLs and fall through to default locale.
+    }
+  }
+
+  return defaultLocale;
+};

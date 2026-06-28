@@ -8,7 +8,7 @@ import {
   setRequestLocale
 } from "@/i18n/compat/server";
 import Document from "@/components/Document";
-import { locales } from "@/i18n/config";
+import { getAlternateLocales, locales } from "@/i18n/config";
 import { Providers } from "@/app/providers";
 
 type Props = {
@@ -36,7 +36,7 @@ export async function generateMetadata({
       title: t("title"),
       description: t("description"),
       locale: locale,
-      alternateLocale: locale === "en" ? ["zh"] : ["en"]
+      alternateLocale: getAlternateLocales(locale as (typeof locales)[number])
     }
   };
 }

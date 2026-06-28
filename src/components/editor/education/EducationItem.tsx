@@ -73,14 +73,14 @@ const EducationEditor: React.FC<EducationEditorProps> = ({
             value={education.startDate}
             onChange={(value) => handleChange("startDate", value)}
             type="date"
-            placeholder="YYYY-MM"
+            placeholder={t("placeholders.yearMonth")}
           />
           <Field
             label={t("labels.endDate")}
             value={education.endDate}
             onChange={(value) => handleChange("endDate", value)}
             type="date"
-            placeholder="YYYY-MM"
+            placeholder={t("placeholders.yearMonth")}
             showPresentSwitch={true}
           />
         </div>
@@ -98,6 +98,7 @@ const EducationEditor: React.FC<EducationEditorProps> = ({
 };
 
 const EducationItem = ({ education }: { education: Education }) => {
+  const t = useTranslations("workbench.educationItem");
   const { updateEducation, deleteEducation } = useResumeStore();
   const dragControls = useDragControls();
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -176,13 +177,8 @@ const EducationItem = ({ education }: { education: Education }) => {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3">
               <div>
-                <h3
-                  className={cn(
-                    "font-medium truncate",
-                    "text-foreground"
-                  )}
-                >
-                  {education.school || "未填写学校"}
+                <h3 className={cn("font-medium truncate", "text-foreground")}>
+                  {education.school || t("emptySchool")}
                 </h3>
                 {(education.major || education.degree) && (
                   <p

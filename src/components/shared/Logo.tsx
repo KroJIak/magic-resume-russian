@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "@/lib/image";
+import { useTranslations } from "@/i18n/compat/client";
 
 interface LogoProps {
   size?: number;
@@ -12,10 +13,11 @@ const Logo: React.FC<LogoProps> = ({
   className = "",
   onClick,
 }) => {
+  const t = useTranslations("common");
   return (
     <Image
       src="/logo.svg"
-      alt="Magic Resume Logo"
+      alt={t("logoAlt")}
       width={size}
       height={size}
       className={className}

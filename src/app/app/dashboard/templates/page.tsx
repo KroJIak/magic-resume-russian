@@ -10,7 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ResumeTemplateComponent from "@/components/templates";
-import { initialResumeState, initialResumeStateEn } from "@/config/initialResumeData";
+import {
+  INITIAL_RESUME_BY_LOCALE,
+  initialResumeState,
+  initialResumeStateEn,
+  initialResumeStateRu,
+} from "@/config/initialResumeData";
 import type { ResumeTemplate } from "@/types/template";
 import { normalizeFontFamily } from "@/utils/fonts";
 
@@ -33,7 +38,8 @@ const getTemplateKey = (templateId: string) =>
 
 type TemplatePreviewBaseData =
   | typeof initialResumeState
-  | typeof initialResumeStateEn;
+  | typeof initialResumeStateEn
+  | typeof initialResumeStateRu;
 
 const buildTemplatePreviewData = (
   baseData: TemplatePreviewBaseData,
@@ -235,7 +241,9 @@ const TemplatesPage = () => {
     }
   };
 
-  const baseData = locale === "en" ? initialResumeStateEn : initialResumeState;
+  const baseData =
+    INITIAL_RESUME_BY_LOCALE[locale as keyof typeof INITIAL_RESUME_BY_LOCALE] ??
+    initialResumeState;
   const activePreviewTemplate =
     DEFAULT_TEMPLATES.find((template) => template.id === previewTemplate) ??
     null;
@@ -286,7 +294,7 @@ const TemplatesPage = () => {
                       ? "ring-2 ring-primary ring-offset-2 dark:ring-offset-gray-950 scale-110"
                       : ""
                   )}
-                  title={color.name === "default" ? "Default" : color.name}
+                  title={t(`colors.${color.name}`)}
                 >
                   {color.value ? (
                     <div
@@ -295,9 +303,10 @@ const TemplatesPage = () => {
                     />
                   ) : (
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 border border-gray-300 dark:border-gray-700 shadow-sm flex items-center justify-center">
-                      <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium tracking-tighter">
-                        Tpl
-                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="h-2.5 w-2.5 rounded-full border border-gray-400/80 dark:border-gray-500/80"
+                      />
                     </div>
                   )}
                 </button>
