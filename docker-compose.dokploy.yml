@@ -1,0 +1,28 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    networks:
+      - default
+      - dokploy-network
+    restart: always
+    labels:
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.magic-resume-magic-resume-service-bhvh1b-web.rule=Host(`resume.krojiak.tech`)
+      - traefik.http.routers.magic-resume-magic-resume-service-bhvh1b-web.entrypoints=web
+      - traefik.http.services.magic-resume-magic-resume-service-bhvh1b-web.loadbalancer.server.port=3000
+      - traefik.http.routers.magic-resume-magic-resume-service-bhvh1b-web.service=magic-resume-magic-resume-service-bhvh1b-web
+      - traefik.http.routers.magic-resume-magic-resume-service-bhvh1b-web.middlewares=redirect-to-https@file
+      - traefik.http.routers.magic-resume-magic-resume-service-bhvh1b-websecure.rule=Host(`resume.krojiak.tech`)
+      - traefik.http.routers.magic-resume-magic-resume-service-bhvh1b-websecure.entrypoints=websecure
+      - traefik.http.services.magic-resume-magic-resume-service-bhvh1b-websecure.loadbalancer.server.port=3000
+      - traefik.http.routers.magic-resume-magic-resume-service-bhvh1b-websecure.service=magic-resume-magic-resume-service-bhvh1b-websecure
+      - traefik.http.routers.magic-resume-magic-resume-service-bhvh1b-websecure.tls.certresolver=letsencrypt
+      - traefik.enable=true
+
+networks:
+  dokploy-network:
+    external: true
