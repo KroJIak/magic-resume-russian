@@ -2,14 +2,15 @@
 
 FROM node:20-alpine AS base
 ENV PNPM_HOME="/pnpm"
+ENV PNPM_STORE_DIR="/pnpm/store"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN mkdir -p "$PNPM_HOME" "$PNPM_STORE_DIR" && corepack enable
 WORKDIR /app
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    sh -lc 'for i in 1 2 3 4 5; do pnpm install --frozen-lockfile && exit 0; sleep 5; done; exit 1'
+    sh -lc 'for i in 1 2 3 4 5; do pnpm install --frozen-lockfile --store-dir="$PNPM_STORE_DIR" && exit 0; sleep 5; done; exit 1'
 
 FROM deps AS builder
 COPY . .
