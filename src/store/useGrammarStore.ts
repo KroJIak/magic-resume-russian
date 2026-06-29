@@ -95,7 +95,7 @@ export const useGrammarStore = create<GrammarStore>((set, get) => ({
     const locale =
       typeof window !== "undefined"
         ? getPreferredLocale(window.location.pathname)
-        : "zh";
+        : "ru";
     const message = (path: string, fallback: string) =>
       getMessage(locale, path, fallback);
     const {

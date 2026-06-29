@@ -31,7 +31,7 @@ const IframeTemplateViewer = () => {
     ? localeParam
     : isTemplatePreviewLocale(cookieLocale)
       ? cookieLocale
-      : "zh";
+      : "ru";
   const isSnapshotMode = searchParams?.get("snapshot") === "1";
 
   const template = useMemo(() => {

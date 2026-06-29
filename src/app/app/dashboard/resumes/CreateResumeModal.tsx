@@ -100,11 +100,13 @@ const TemplateCardThumbnail = ({
 const TemplateThumbnail = ({
     template,
     t,
+    locale,
     scaleModifier = 1,
     quality = "low" // low for grid, high for preview
 }: {
     template: TemplateOption,
     t: Translator,
+    locale: string,
     scaleModifier?: number,
     quality?: "low" | "high"
 }) => {
@@ -373,7 +375,13 @@ export const CreateResumeModal = ({
                                                 width: "auto"
                                             }}
                                         >
-                                            <TemplateThumbnail template={previewTarget} t={t} quality="high" scaleModifier={1} />
+                                            <TemplateThumbnail
+                                                template={previewTarget}
+                                                t={t}
+                                                locale={locale}
+                                                quality="high"
+                                                scaleModifier={1}
+                                            />
                                         </motion.div>
                                     </motion.div>
                                 </div>
